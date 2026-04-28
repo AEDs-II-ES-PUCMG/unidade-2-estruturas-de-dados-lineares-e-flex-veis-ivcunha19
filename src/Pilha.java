@@ -40,6 +40,15 @@ public class Pilha<E> {
 
 	}
 
+	public String listaDados(){
+		StringBuilder res = new StringBuilder();
+		Celula<E> esc = topo;
+		while (esc != fundo) {
+			res.append(esc.getItem()+"\n");
+			esc = esc.getProximo();
+		}
+		return res.toString();
+	}
 	/**
 	 * Cria e devolve uma nova pilha contendo os primeiros numItens elementos
 	 * do topo da pilha atual.
@@ -53,8 +62,12 @@ public class Pilha<E> {
 	 * @throws IllegalArgumentException se a pilha não contém numItens elementos.
 	 */
 	public Pilha<E> subPilha(int numItens) {
-		
-		// TODO
-		return null;
+		Pilha<E> p = new Pilha<E>();
+		Celula<E> atual = topo;
+		for (int i = 0; i < numItens; i++) {
+			p.empilhar(atual.getItem());
+			atual = atual.getProximo();
+		}
+		return p;
 	}
 }

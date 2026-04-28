@@ -22,6 +22,8 @@ public class App {
     /** Pilha de pedidos */
     static Pilha<Pedido> pilhaPedidos = new Pilha<>();
         
+    static Pilha<ItemDePedido> pilhaProdutos = new Pilha<ItemDePedido>();
+
     static void limparTela() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -209,13 +211,20 @@ public class App {
      * @param pedido O pedido que deve ser finalizado.
      */
     public static void finalizarPedido(Pedido pedido) {
-    	
-    	// TODO
+        pilhaPedidos.empilhar(pedido);
+        for (ItemDePedido item : pedido.getItensDoPedido()) {
+            pilhaProdutos.empilhar(item);
+        }
     }
     
     public static void listarProdutosPedidosRecentes() {
-    	
-    	// TODO
+    	System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
+        int quant = teclado.nextInt();
+        Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
+        for (int i = 0; i < quant; i++) {
+            ItemDePedido atual = subpilha.desempilhar();
+            System.out.println(atual.toString());
+        }
     }
     
 	public static void main(String[] args) {
