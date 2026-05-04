@@ -18,7 +18,6 @@ public class Pilha<E> {
 	}
 
 	public void empilhar(E item) {
-
 		topo = new Celula<E>(item, topo);
 	}
 

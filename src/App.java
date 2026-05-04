@@ -212,20 +212,30 @@ public class App {
      */
     public static void finalizarPedido(Pedido pedido) {
         pilhaPedidos.empilhar(pedido);
-        for (ItemDePedido item : pedido.getItensDoPedido()) {
-            pilhaProdutos.empilhar(item);
+
+        ItemDePedido[] itens = pedido.getItensDoPedido();
+
+        for (int i = 0; i < pedido.getQuantItens(); i++) {
+            pilhaProdutos.empilhar(itens[i]);
         }
     }
     
-    public static void listarProdutosPedidosRecentes() {
-    	System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
-        int quant = teclado.nextInt();
-        Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
-        for (int i = 0; i < quant; i++) {
-            ItemDePedido atual = subpilha.desempilhar();
-            System.out.println(atual.toString());
-        }
+public static void listarProdutosPedidosRecentes() {
+    System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
+    int quant = teclado.nextInt();
+
+    if (pilhaProdutos.vazia()) {
+        System.out.println("Não há pedidos cadastrados.");
+        return;
     }
+
+    try {
+        Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
+        System.out.println(subpilha.listaDados());
+    } catch (Exception e) {
+        System.out.println("Não existem pedidos suficientes para listar essa quantidade.");
+    }
+}
     
 	public static void main(String[] args) {
 		
