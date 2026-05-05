@@ -24,6 +24,8 @@ public class App {
         
     static Pilha<ItemDePedido> pilhaProdutos = new Pilha<ItemDePedido>();
 
+    static Fila<Pedido> filaPedidos = new Fila<Pedido>();
+
     static void limparTela() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
@@ -66,6 +68,7 @@ public class App {
         System.out.println("4 - Iniciar novo pedido");
         System.out.println("5 - Fechar pedido");
         System.out.println("6 - Listar produtos dos pedidos mais recentes");
+        System.out.println("7 - ...");
         System.out.println("0 - Sair");
         System.out.print("Digite sua opção: ");
         return Integer.parseInt(teclado.nextLine());
@@ -218,25 +221,33 @@ public class App {
         for (int i = 0; i < pedido.getQuantItens(); i++) {
             pilhaProdutos.empilhar(itens[i]);
         }
+
+        for (int i = 0; i < pedido.getQuantItens(); i++) {
+            filaPedidos.enfileirar(pedido);
+        }
     }
     
-public static void listarProdutosPedidosRecentes() {
-    System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
-    int quant = teclado.nextInt();
+    public static void listarProdutosPedidosRecentes() {
+        System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
+        int quant = teclado.nextInt();
 
-    if (pilhaProdutos.vazia()) {
-        System.out.println("Não há pedidos cadastrados.");
-        return;
-    }
+        if (pilhaProdutos.vazia()) {
+            System.out.println("Não há pedidos cadastrados.");
+            return;
+        }
 
-    try {
-        Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
-        System.out.println(subpilha.listaDados());
-    } catch (Exception e) {
-        System.out.println("Não existem pedidos suficientes para listar essa quantidade.");
+        try {
+            Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
+            System.out.println(subpilha.listaDados());
+        } catch (Exception e) {
+            System.out.println("Não existem pedidos suficientes para listar essa quantidade.");
+        }
     }
-}
     
+    public static void testeFilaPedidos(){
+        filaPedidos.imprimir();
+    }
+
 	public static void main(String[] args) {
 		
 		teclado = new Scanner(System.in, Charset.forName("UTF-8"));
@@ -257,6 +268,7 @@ public static void listarProdutosPedidosRecentes() {
                 case 4 -> pedido = iniciarPedido();
                 case 5 -> finalizarPedido(pedido);
                 case 6 -> listarProdutosPedidosRecentes();
+                case 7 -> testeFilaPedidos();
             }
             pausa();
         }while(opcao != 0);       
