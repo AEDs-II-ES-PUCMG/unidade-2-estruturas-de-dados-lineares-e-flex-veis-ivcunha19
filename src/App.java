@@ -22,7 +22,7 @@ public class App {
     /** Pilha de pedidos */
     static Pilha<Pedido> pilhaPedidos = new Pilha<>();
         
-    static Pilha<ItemDePedido> pilhaProdutos = new Pilha<ItemDePedido>();
+    static Pilha<Produto> pilhaProdutos = new Pilha<Produto>();
 
     static Fila<Pedido> filaPedidos = new Fila<Pedido>();
 
@@ -68,7 +68,7 @@ public class App {
         System.out.println("4 - Iniciar novo pedido");
         System.out.println("5 - Fechar pedido");
         System.out.println("6 - Listar produtos dos pedidos mais recentes");
-        System.out.println("7 - ...");
+        System.out.println("7 - Extrair lote de pedidos da fila");
         System.out.println("0 - Sair");
         System.out.print("Digite sua opção: ");
         return Integer.parseInt(teclado.nextLine());
@@ -219,7 +219,7 @@ public class App {
         ItemDePedido[] itens = pedido.getItensDoPedido();
 
         for (int i = 0; i < pedido.getQuantItens(); i++) {
-            pilhaProdutos.empilhar(itens[i]);
+            pilhaProdutos.empilhar(itens[i].getProduto());
         }
 
         for (int i = 0; i < pedido.getQuantItens(); i++) {
@@ -237,15 +237,20 @@ public class App {
         }
 
         try {
-            Pilha<ItemDePedido> subpilha = pilhaProdutos.subPilha(quant);
+            Pilha<Produto> subpilha = pilhaProdutos.subPilha(quant);
             System.out.println(subpilha.listaDados());
         } catch (Exception e) {
             System.out.println("Não existem pedidos suficientes para listar essa quantidade.");
         }
     }
     
-    public static void testeFilaPedidos(){
-        filaPedidos.imprimir();
+    public static void extrairLotePedidos(){
+        System.out.println("Quantos pedidos deseja extrair da fila?: ");
+        int quant = teclado.nextInt();
+        
+        Fila<Pedido> lote = filaPedidos.extrairLote(quant);
+        System.out.println("Lote de pedidos extraído:");
+        lote.imprimir();
     }
 
 	public static void main(String[] args) {
@@ -268,7 +273,7 @@ public class App {
                 case 4 -> pedido = iniciarPedido();
                 case 5 -> finalizarPedido(pedido);
                 case 6 -> listarProdutosPedidosRecentes();
-                case 7 -> testeFilaPedidos();
+                case 7 -> extrairLotePedidos();
             }
             pausa();
         }while(opcao != 0);       

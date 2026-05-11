@@ -79,4 +79,22 @@ public class Fila<E> {
 		}
 		return cont;
 	}
+
+	/**
+	 * Desenfileira os primeiros K elementos da fila atual, respeitando a ordem de chegada,
+	 * e retorna esses elementos em uma nova Fila flexível.
+	 * Caso a fila original possua menos de K itens, extrai apenas os itens disponíveis.
+	 * @param numItens número máximo de itens a extrair
+	 * @return Nova fila contendo os itens extraídos
+	 */
+	public Fila<E> extrairLote(int numItens) {
+		Fila<E> novaFila = new Fila<E>();
+		for (int i = 0; i < numItens; i++) {
+			if (vazia()) {
+				break;
+			}
+			novaFila.enfileirar(desenfileirar());
+		}
+		return novaFila;
+	}
 }
