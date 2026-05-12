@@ -78,5 +78,19 @@ public class Pilha<E> {
 			certo(atual.getProximo());
 			System.out.println(atual.getItem());
 		}
+		Pilha<E> p = new Pilha<E>();
+		Pilha<E> temp = new Pilha<E>();
+		Celula<E> atual = topo;
+		for (int i = 0; i < numItens; i++) {
+			if (atual == fundo) {
+				throw new IllegalArgumentException("A pilha não contém " + numItens + " elementos.");
+			}
+			temp.empilhar(atual.getItem());
+			atual = atual.getProximo();
+		}
+		while (!temp.vazia()) {
+			p.empilhar(temp.desempilhar());
+		}
+		return p;
 	}
 }

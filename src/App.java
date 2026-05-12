@@ -21,6 +21,10 @@ public class App {
 
     // TODO: Tarefa 5 - Substituir a pilha abaixo por uma Lista<Pedido> para armazenar os pedidos.
     static Pilha<Pedido> pilhaPedidos = new Pilha<>();
+        
+    static Pilha<Produto> pilhaProdutos = new Pilha<Produto>();
+
+    static Fila<Pedido> filaPedidos = new Fila<Pedido>();
 
     static void limparTela() {
         System.out.print("\033[H\033[2J");
@@ -61,7 +65,8 @@ public class App {
         System.out.println("3 - Procurar por um produto, por nome");
         System.out.println("4 - Iniciar novo pedido");
         System.out.println("5 - Fechar pedido");
-        System.out.println("6 - Filtrar pedidos por produto");
+        System.out.println("6 - Listar produtos dos pedidos mais recentes");
+        System.out.println("7 - Extrair lote de pedidos da fila");
         System.out.println("0 - Sair");
         System.out.print("Digite sua opção: ");
         return Integer.parseInt(teclado.nextLine());
@@ -192,19 +197,43 @@ public class App {
      * Finaliza um pedido, armazenando-o na lista de pedidos.
      */
     public static void finalizarPedido(Pedido pedido) {
-    	// TODO: Tarefa 5 - Verificar se o pedido é válido e armazená-lo na lista de pedidos.
-    	//       Exibir o pedido finalizado na tela.
-    }
+        pilhaPedidos.empilhar(pedido);
 
-    /**
-     * Filtra e exibe os pedidos que apresentam um produto específico,
-     * cuja descrição foi informada pelo usuário.
-     */
-    public static void filtrarPorProduto() {
-    	// TODO: Tarefa 5 - Ler a descrição do produto informada pelo usuário.
-    	//       Utilizar obrigatoriamente o método filtrar (Lista<E>) para selecionar os pedidos
-    	//       e o método buscarPor (Lista<E>) para verificar se um pedido contém o produto buscado.
-    	//       Exibir os pedidos encontrados ou uma mensagem caso nenhum seja localizado.
+        ItemDePedido[] itens = pedido.getItensDoPedido();
+
+        for (int i = 0; i < pedido.getQuantItens(); i++) {
+            pilhaProdutos.empilhar(itens[i].getProduto());
+        }
+
+        for (int i = 0; i < pedido.getQuantItens(); i++) {
+            filaPedidos.enfileirar(pedido);
+        }
+    }
+    
+    public static void listarProdutosPedidosRecentes() {
+        System.out.println("Quantos dos pedidos mais recentes você deseja listar?: ");
+        int quant = teclado.nextInt();
+
+        if (pilhaProdutos.vazia()) {
+            System.out.println("Não há pedidos cadastrados.");
+            return;
+        }
+
+        try {
+            Pilha<Produto> subpilha = pilhaProdutos.subPilha(quant);
+            System.out.println(subpilha.listaDados());
+        } catch (Exception e) {
+            System.out.println("Não existem pedidos suficientes para listar essa quantidade.");
+        }
+    }
+    
+    public static void extrairLotePedidos(){
+        System.out.println("Quantos pedidos deseja extrair da fila?: ");
+        int quant = teclado.nextInt();
+        
+        Fila<Pedido> lote = filaPedidos.extrairLote(quant);
+        System.out.println("Lote de pedidos extraído:");
+        lote.imprimir();
     }
 
 	public static void main(String[] args) {
@@ -226,7 +255,8 @@ public class App {
                 case 3 -> mostrarProduto(localizarProdutoDescricao());
                 case 4 -> pedido = iniciarPedido();
                 case 5 -> finalizarPedido(pedido);
-                case 6 -> filtrarPorProduto();
+                case 6 -> listarProdutosPedidosRecentes();
+                case 7 -> extrairLotePedidos();
             }
             pausa();
         } while (opcao != 0);
